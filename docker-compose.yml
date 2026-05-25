@@ -17,8 +17,14 @@ services:
     volumes:
       - db_data:/data
     command: >
-      sh -c "python3 -m pip install --upgrade pip && \
-      python3 -c 'import sqlite3; conn = sqlite3.connect(\"/data/parad.db\"); conn.execute(\"PRAGMA journal_mode=WAL;\"); conn.close(); print(\"SQLite DB initialized at /data/parad.db\")'"
-      
+      sh -c "python3 -m pip install --upgrade pip &&
+             python3 -c \"
+import sqlite3
+conn = sqlite3.connect('/data/parad.db')
+conn.execute('PRAGMA journal_mode=WAL;')
+conn.close()
+print('SQLite DB initialized at /data/parad.db')
+\""
+
 volumes:
   db_data:
