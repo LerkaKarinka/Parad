@@ -23,6 +23,8 @@ import sqlite3
 conn = sqlite3.connect('/data/parad.db')
 conn.execute('PRAGMA journal_mode=WAL;')
 conn.close()
-print('SQLite DB initialized at /data/parad.db')"
-    volumes:
-      db_data:
+print('SQLite DB initialized at /data/parad.db')
+PY"
+
+volumes:
+  db_data:
