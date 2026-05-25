@@ -6,16 +6,23 @@ services:
     ports:
       - "5000:5000"
     volumes:
-      - .:/app
+      - .:/app  # Монтируем код проекта
     environment:
       - FLASK_ENV=development
     depends_on:
       - db
 
   db:
-    image: sqlite3
+    image: python:3.11-slim  # Используем образ с Python для работы SQLite
     volumes:
-      - db_data:/data
-
-volumes:
-  db_data:
+      - db_data:/data  # Точка монтирования для базы данных
+    command: >
+      bash -c "python3 -m pip install --upgrade pip &&
+               python3 - <<'PY'
+import sqlite3
+conn = sqlite3.connect('/data/parad.db')
+conn.execute('PRAGMA journal_mode=WAL;')
+conn.close()
+print('SQLite DB initialized at /data/parad.db')"
+    volumes:
+      db_data:
