@@ -177,7 +177,7 @@ if __name__ == '__main__':
     init_db()  # Инициализируем БД при запуске
     print("\n" + "="*50)
     print("🚀 Сервер запущен!")
-    print(f"📁 Откройте: http://localhost:5000")
+    print(f"📁 Откройте: http://localhost:5001")
     print(f"🔐 Админ-панель: http://localhost:5000/admin-panel.html")
     print("="*50 + "\n")
-    app.run(debug=True, port=5000, host='0.0.0.0')
+    app.run(debug=True, port=5001, host='0.0.0.0')
