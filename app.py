@@ -7,8 +7,8 @@ from datetime import datetime
 app = Flask(__name__, static_folder='.', static_url_path='')
 CORS(app)  # Разрешаем запросы с фронтенда
 
-# Путь к базе данных
-DB_PATH = 'parad.db'
+# Путь к базе данных (можно переопределить через переменную окружения)
+DB_PATH = os.environ.get('DB_PATH', 'parad.db')
 
 # ========== Функции для работы с БД ==========
 

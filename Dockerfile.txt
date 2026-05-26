@@ -1,0 +1,23 @@
+# Используем официальный образ Python (slim для уменьшения размера)
+FROM python:3.11-slim
+
+# Рабочая директория внутри контейнера
+WORKDIR /app
+
+# Копируем только файл зависимостей для ускорения сборки
+COPY requirements.txt .
+
+# Устанавливаем зависимости
+RUN pip install --no-cache-dir -r requirements.txt
+
+# Копируем весь проект
+COPY . .
+
+# Создаём директорию для базы данных и даём права на запись
+RUN mkdir -p /app/data && chmod 777 /app/data
+
+# Открываем порт для Flask
+EXPOSE 5000
+
+# Команда для запуска приложения
+CMD ["python", "app.py"]

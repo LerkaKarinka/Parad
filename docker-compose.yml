@@ -7,24 +7,11 @@ services:
       - "5000:5000"
     volumes:
       - .:/app
+      - db_data:/app/data  # Том для хранения базы данных
     environment:
       - FLASK_ENV=development
-    depends_on:
-      - db
-
-  db:
-    image: python:3.11-slim
-    volumes:
-      - db_data:/data
-    command: >
-      sh -c "python3 -m pip install --upgrade pip &&
-             python3 -c \"
-import sqlite3
-conn = sqlite3.connect('/data/parad.db')
-conn.execute('PRAGMA journal_mode=WAL;')
-conn.close()
-print('SQLite DB initialized at /data/parad.db')
-\""
+      - DB_PATH=/app/data/parad.db
+    restart: unless-stopped
 
 volumes:
   db_data:
