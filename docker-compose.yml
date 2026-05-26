@@ -6,8 +6,7 @@ services:
     ports:
       - "5000:5000"
     volumes:
-      - .:/app
-      - db_data:/app/data  # Том для хранения базы данных
+      - db_data:/app/data
     environment:
       - FLASK_ENV=development
       - DB_PATH=/app/data/parad.db
