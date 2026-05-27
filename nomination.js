@@ -2,7 +2,7 @@
 const urlParams = new URLSearchParams(window.location.search);
 const nominationId = urlParams.get('id') || 'default';
 
-const API_URL = 'http://localhost:5000';  // ИЗМЕНЕНО: порт 5000 для Python
+const API_URL = 'http://192.168.3.78:5001';  // ИЗМЕНЕНО: порт 5000 для Python
 
 const nominationNames = {
     'zvezdnyy-lider': 'Звёздный лидер',
