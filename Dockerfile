@@ -17,4 +17,4 @@ COPY . .
 EXPOSE 5001
 
 # Команда для запуска приложения
-CMD ["python", "app.py"]
+CMD ["python app.py", "app.py"]
