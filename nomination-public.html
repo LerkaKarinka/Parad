@@ -28,7 +28,7 @@
         const urlParams = new URLSearchParams(window.location.search);
         const nominationId = urlParams.get('id') || 'default';
         
-        const API_URL = 'http://localhost:5000';
+        const API_URL = 'http://192.168.3.78:5001';
 
         const nominationNames = {
             'zvezdnyy-lider': 'Звёздный лидер',
@@ -129,7 +129,7 @@
         }
 
         // Обновлять данные каждые 5 секунд (опционально)
-        setInterval(loadEntries, 5000);
+        setInterval(loadEntries, 5001);
     </script>
 </body>
 </html>
