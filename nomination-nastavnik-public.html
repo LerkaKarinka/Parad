@@ -28,7 +28,8 @@
         const urlParams = new URLSearchParams(window.location.search);
         const nominationId = urlParams.get('id') || 'default';
         
-        const API_URL = 'http://192.168.3.78:5001';
+        // Используем относительный URL для работы в любой среде
+        const API_URL = '';  // Пустая строка означает текущий домен/порт
 
         const nominationNames = {
             'zvezdnoe-nastavnik': 'Звёздный наставник',
