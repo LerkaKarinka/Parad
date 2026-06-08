@@ -1,14 +1,26 @@
+version: '3.8'
+
 services:
   web:
-    build: .
+    build:
+      context: .
+      dockerfile: Dockerfile
     ports:
-      - "5001:5001"
+      - "${PORT:-5001}:5001"
     volumes:
-      - db_data:/app/data
+      - app-data:/app/data
     environment:
-      - FLASK_ENV=development
-      - DB_PATH=/app/data/parad.db
+      - FLASK_ENV=production
+      - SECRET_KEY=${SECRET_KEY:-your-secret-key-change-in-production}
+      - SESSION_COOKIE_SECURE=False
     restart: unless-stopped
+    networks:
+      - app-network
+
+networks:
+  app-network:
+    driver: bridge
 
 volumes:
-  db_data:
+  app-data:
+    driver: local
