@@ -8,4 +8,4 @@ services:
       - ./data:/app/data
     environment:
       - DB_PATH=/app/data/parad.db
-    restart: unless-stopped
+    
