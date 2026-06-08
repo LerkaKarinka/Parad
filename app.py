@@ -8,12 +8,17 @@ app = Flask(__name__, static_folder='.', static_url_path='')
 CORS(app)  # Разрешаем запросы с фронтенда
 
 # Путь к базе данных (можно переопределить через переменную окружения)
-DB_PATH = os.environ.get('DB_PATH', 'parad.db')
+DB_PATH = os.environ.get('DB_PATH', '/app/data/parad.db')
 
 # ========== Функции для работы с БД ==========
 
 def get_db_connection():
     """Создаёт соединение с SQLite базой данных"""
+    # Убеждаемся, что директория для БД существует
+    db_dir = os.path.dirname(DB_PATH)
+    if db_dir and not os.path.exists(db_dir):
+        os.makedirs(db_dir, exist_ok=True)
+    
     conn = sqlite3.connect(DB_PATH)
     conn.row_factory = sqlite3.Row  # Чтобы результаты были как словари
     return conn
@@ -54,11 +59,17 @@ def init_db():
 @app.route('/')
 def index():
     """Главная страница"""
-    return send_from_directory('.', 'index.html')
+    if os.path.exists('index.html'):
+        return send_from_directory('.', 'index.html')
+    return "index.html не найден", 404
 
 @app.route('/<path:filename>')
 def serve_static(filename):
     """Отдаём все статические файлы (HTML, CSS, JS)"""
+    # Защита от доступа к системным файлам
+    if '..' in filename or filename.startswith('/'):
+        return "Invalid path", 400
+    
     # Проверяем, существует ли файл
     if os.path.exists(filename):
         return send_from_directory('.', filename)
@@ -175,9 +186,17 @@ if __name__ == '__main__':
         print("\nУбедитесь, что все HTML файлы находятся в той же папке, что и app.py\n")
     
     init_db()  # Инициализируем БД при запуске
+    
+    # Получаем IP адрес для вывода
+    import socket
+    hostname = socket.gethostname()
+    local_ip = socket.gethostbyname(hostname)
+    
     print("\n" + "="*50)
     print("🚀 Сервер запущен!")
-    print(f"📁 Откройте: http://192.168.3.78:5001")
-    print(f"🔐 Админ-панель: http://192.168.3.78:5001/admin-panel.html")
+    print(f"📍 Локальный доступ: http://localhost:5001")
+    print(f"🌐 Сеть: http://{local_ip}:5001")
+    print(f"🔐 Админ-панель: http://localhost:5001/admin-panel.html")
     print("="*50 + "\n")
+    
     app.run(debug=True, port=5001, host='0.0.0.0')
