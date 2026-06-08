@@ -1,14 +1,13 @@
+version: '3.8'
+
 services:
   web:
     build: .
+    container_name: parad-app
     ports:
       - "5001:5001"
     volumes:
-      - db_data:/app/data
+      - ./data:/app/data   # сохраняем SQLite базу на хост
     environment:
-      - FLASK_ENV=development
       - DB_PATH=/app/data/parad.db
     restart: unless-stopped
-
-volumes:
-  db_data:
