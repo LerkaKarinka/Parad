@@ -1,23 +1,30 @@
-# Используем официальный образ Python (slim для уменьшения размера)
-FROM python3
+FROM python:3.12-slim
 
-# Рабочая директория внутри контейнера
+# Устанавливаем рабочую директорию
 WORKDIR /app
 
-# Копируем только файл зависимостей для ускорения сборки
-COPY requirements.txt .
+# Устанавливаем переменные окружения
+ENV PYTHONDONTWRITEBYTECODE=1
+ENV FLASK_APP=app.py
+ENV FLASK_ENV=production
 
-# Устанавливаем зависимости
+# Устанавливаем системные зависимости
+RUN apt-get update && apt-get install -y --no-install-recommends \
+    curl \
+    && rm -rf /var/lib/apt/lists/*
+
+# Копируем requirements.txt и устанавливаем зависимости
+COPY requirements.txt .
 RUN pip install --no-cache-dir -r requirements.txt
 
-# Копируем весь проект (кроме базы данных)
+# Копируем всё приложение
 COPY . .
 
-# Создаём директорию для базы данных и даём права на запись
-RUN mkdir -p /app/data && chmod 777 /app/data
+# Создаём директорию для данных если её нет
+RUN mkdir -p /app/data
 
-# Открываем порт для Flask (исправлено с 5000 на 5001)
+# Открываем порт 5000
 EXPOSE 5001
 
-# Команда для запуска приложения
-CMD ["python", "app.py"]
+# Запускаем приложение через gunicorn для production
+CMD ["gunicorn", "--bind", "0.0.0.0:5001", "--workers", "4", "--threads", "2", "app:app"]
