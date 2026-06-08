@@ -194,9 +194,7 @@ if __name__ == '__main__':
     
     print("\n" + "="*50)
     print("🚀 Сервер запущен!")
-    print(f"📍 Локальный доступ: http://localhost:5001")
-    print(f"🌐 Сеть: http://{local_ip}:5001")
-    print(f"🔐 Админ-панель: http://localhost:5001/admin-panel.html")
+    print(f"📍 Локальный доступ: http://192.168.3.78:5001/")
     print("="*50 + "\n")
     
     app.run(debug=True, port=5001, host='0.0.0.0')
