@@ -1,20 +1,25 @@
-FROM python:3.12-slim
+# Используем официальный образ Python
+FROM python:3.9-slim
 
+# Устанавливаем рабочую директорию внутри контейнера
 WORKDIR /app
 
-ENV PYTHONDONTWRITEBYTECODE=1
-ENV FLASK_APP=app.py
-ENV FLASK_ENV=production
-
-RUN apt-get update && apt-get install -y --no-install-recommends \
-    curl \
-    && rm -rf /var/lib/apt/lists/*
-
+# Копируем файл зависимостей и устанавливаем их
 COPY requirements.txt .
 RUN pip install --no-cache-dir -r requirements.txt
 
+# Копируем всё содержимое проекта в контейнер
 COPY . .
 
+# Создаём директорию для базы данных (будет использоваться, если не смонтирован том)
+RUN mkdir -p /app/data
+
+# Переменные окружения
+ENV DB_PATH=/app/data/parad.db
+ENV PYTHONUNBUFFERED=1
+
+# Открываем порт, который слушает приложение
 EXPOSE 5001
 
-CMD ["gunicorn", "--bind", "0.0.0.0:5001", "--workers", "4", "--threads", "2", "app:app"]
+# Запускаем приложение
+CMD ["python", "app.py"]
