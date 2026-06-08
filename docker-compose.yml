@@ -9,3 +9,4 @@ services:
     environment:
       - DB_PATH=/app/data/parad.db
     restart: unless-stopped
+    command: ["python", "app.py"]
