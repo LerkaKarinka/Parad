@@ -12,13 +12,12 @@ RUN pip install --no-cache-dir -r requirements.txt
 
 # Копируем весь проект (кроме базы данных)
 COPY . .
-RUN rm -f /app/data/parad.db || true
 
 # Создаём директорию для базы данных и даём права на запись
 RUN mkdir -p /app/data && chmod 777 /app/data
 
-# Открываем порт для Flask
-EXPOSE 5000
+# Открываем порт для Flask (исправлено с 5000 на 5001)
+EXPOSE 5001
 
 # Команда для запуска приложения
 CMD ["python", "app.py"]
