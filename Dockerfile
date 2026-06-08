@@ -10,11 +10,14 @@ COPY requirements.txt .
 # Устанавливаем зависимости
 RUN pip install --no-cache-dir -r requirements.txt
 
-# Копируем весь проект
+# Копируем весь проект (кроме базы данных)
 COPY . .
 
-# Открываем порт для Flask
+# Создаём директорию для базы данных и даём права на запись
+RUN mkdir -p /app/data && chmod 777 /app/data
+
+# Открываем порт для Flask (исправлено с 5000 на 5001)
 EXPOSE 5001
 
 # Команда для запуска приложения
-CMD ["python app.py", "app.py"]
+CMD ["python", "app.py"]
