@@ -1,23 +1,20 @@
-# Используем официальный образ Python (slim-версия для меньшего размера)
-FROM python:3-slim
+FROM python:3.12-slim
 
-# Рабочая директория внутри контейнера
 WORKDIR /app
 
-# Копируем файл зависимостей
-COPY requirements.txt .
+ENV PYTHONDONTWRITEBYTECODE=1
+ENV FLASK_APP=app.py
+ENV FLASK_ENV=production
 
-# Устанавливаем зависимости
+RUN apt-get update && apt-get install -y --no-install-recommends \
+    curl \
+    && rm -rf /var/lib/apt/lists/*
+
+COPY requirements.txt .
 RUN pip install --no-cache-dir -r requirements.txt
 
-# Копируем весь проект
 COPY . .
 
-# Создаём директорию для базы данных и даём права на запись
-RUN mkdir -p /app/data && chmod 777 /app/data
-
-# Открываем порт
 EXPOSE 5001
 
-# Команда запуска
-CMD ["python", "app.py"]
+CMD ["gunicorn", "--bind", "0.0.0.0:5001", "--workers", "4", "--threads", "2", "app:app"]
