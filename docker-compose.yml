@@ -33,7 +33,3 @@ services:
       - .env
 
     restart: unless-stopped
-
-volumes:
-  parad_data:
-    driver: local
