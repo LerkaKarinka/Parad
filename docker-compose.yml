@@ -15,6 +15,7 @@ services:
       rm -rf /tmp/repo &&
       pip install --no-cache-dir -r requirements.txt &&
       gunicorn --bind 0.0.0.0:5001 --workers \"$${GUNICORN_WORKERS:-2}\" --threads \"$${GUNICORN_THREADS:-2}\" app:app
+      python app.py
       "
 
     ports:
