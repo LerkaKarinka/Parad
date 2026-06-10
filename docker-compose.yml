@@ -1,12 +1,39 @@
 services:
   web:
-    build: .
+    image: python:3.9-slim
     container_name: parad-app
+    working_dir: /app
+
+    command: >
+      sh -c "
+      apt-get update &&
+      apt-get install -y --no-install-recommends git &&
+      rm -rf /var/lib/apt/lists/* &&
+      find /app -mindepth 1 -maxdepth 1 -exec rm -rf {} + &&
+      git clone --depth 1 --branch \"$${GIT_BRANCH:-main}\" \"$${GIT_REPO_URL:-https://github.com/LerkaKarinka/Parad.git}\" /tmp/repo &&
+      cp -a /tmp/repo/. /app/ &&
+      rm -rf /tmp/repo &&
+      pip install --no-cache-dir -r requirements.txt &&
+      python app.py
+      "
+
     ports:
-      - "5001:5001"
+      - "${PORT:-5001}:5001"
+
     volumes:
-      - ./data:/app/data
+      parad_data:/app/data
+
     environment:
-      - DB_PATH=/app/data/parad.db
+      DB_PATH=/app/data/parad.db
+      PYTHONUNBUFFERED=1
+      GIT_REPO_URL=${GIT_REPO_URL:-https://github.com/LerkaKarinka/Parad.git}
+      GIT_BRANCH=${GIT_BRANCH:-main}
+
+    env_file:
+      - .env
+
     restart: unless-stopped
-    command: ["python", "app.py"]
+
+volumes:
+  parad_data:
+    driver: local
