@@ -24,8 +24,6 @@ services:
       FLASK_ENV: production
       SECRET_KEY: ${SECRET_KEY:?SECRET_KEY must be set}
       SESSION_COOKIE_SECURE: ${SESSION_COOKIE_SECURE:-False}
-      DEFAULT_ADMIN_USERNAME: ${DEFAULT_ADMIN_USERNAME:-admin}
-      DEFAULT_ADMIN_PASSWORD: ${DEFAULT_ADMIN_PASSWORD:?DEFAULT_ADMIN_PASSWORD must be set}
       GIT_REPO_URL: ${GIT_REPO_URL:-https://github.com/LerkaKarinka/Parad.git}
       GIT_BRANCH: ${GIT_BRANCH:-main}
 
