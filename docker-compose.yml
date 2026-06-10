@@ -21,19 +21,19 @@ services:
       - "${PORT:-5001}:5001"
 
     volumes:
-      parad_data:/app/data
+      - parad_data:/app/data
 
     environment:
-      DB_PATH=/app/data/parad.db
-      PYTHONUNBUFFERED=1
-      GIT_REPO_URL=${GIT_REPO_URL:-https://github.com/LerkaKarinka/Parad.git}
-      GIT_BRANCH=${GIT_BRANCH:-main}
+      DB_PATH: /app/data/parad.db
+      PYTHONUNBUFFERED: "1"
+      GIT_REPO_URL: ${GIT_REPO_URL:-https://github.com/LerkaKarinka/Parad.git}
+      GIT_BRANCH: ${GIT_BRANCH:-main}
 
     env_file:
       - .env
 
     restart: unless-stopped
-    
+
 volumes:
   parad_data:
     driver: local
