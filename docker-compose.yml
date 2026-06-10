@@ -1,12 +1,35 @@
 services:
   web:
-    build: .
+    image: python:3.11-slim
     container_name: parad-app
+    working_dir: /app
+
+    command: >
+      sh -c "
+      apt-get update &&
+      apt-get install -y --no-install-recommends git &&
+      rm -rf /var/lib/apt/lists/* &&
+      find /app -mindepth 1 -maxdepth 1 -exec rm -rf {} + &&
+      git clone --depth 1 --branch \"$${GIT_BRANCH:-main}\" \"$${GIT_REPO_URL:-https://github.com/LerkaKarinka/Parad.git}\" /tmp/repo &&
+      cp -a /tmp/repo/. /app/ &&
+      rm -rf /tmp/repo &&
+      pip install --no-cache-dir -r requirements.txt &&
+      gunicorn --bind 0.0.0.0:5001 --workers \"$${GUNICORN_WORKERS:-2}\" --threads \"$${GUNICORN_THREADS:-2}\" app:app
+      "
+
     ports:
-      - "5001:5001"
-    volumes:
-      - ./data:/app/data
+      - "${PORT:-5001}:5001"
+
     environment:
-      - DB_PATH=/app/data/parad.db
+      FLASK_ENV: production
+      SECRET_KEY: ${SECRET_KEY:?SECRET_KEY must be set}
+      SESSION_COOKIE_SECURE: ${SESSION_COOKIE_SECURE:-False}
+      DEFAULT_ADMIN_USERNAME: ${DEFAULT_ADMIN_USERNAME:-admin}
+      DEFAULT_ADMIN_PASSWORD: ${DEFAULT_ADMIN_PASSWORD:?DEFAULT_ADMIN_PASSWORD must be set}
+      GIT_REPO_URL: ${GIT_REPO_URL:-https://github.com/LerkaKarinka/Parad.git}
+      GIT_BRANCH: ${GIT_BRANCH:-main}
+
+    env_file:
+      - .env
+
     restart: unless-stopped
-    command: ["python", "app.py"]
