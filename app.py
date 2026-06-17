@@ -78,7 +78,7 @@ def serve_static(filename):
 
 # ========== API для записей номинаций ==========
 
-@app.route('/entries/<nomination_id>', methods=['GET'])
+@app.route('/api/entries/<nomination_id>', methods=['GET'])
 def get_entries(nomination_id):
     """Получить все записи для конкретной номинации"""
     conn = get_db_connection()
