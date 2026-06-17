@@ -3,7 +3,7 @@ const urlParams = new URLSearchParams(window.location.search);
 const nominationId = urlParams.get('id') || 'default';
 
 // Используем относительный URL для работы в любой среде
-const API_URL = '';  // Пустая строка означает текущий домен/порт
+const API_URL = '/parad';  // Пустая строка означает текущий домен/порт
 
 const nominationNames = {
     'zvezdnyy-lider': 'Звёздный лидер',
