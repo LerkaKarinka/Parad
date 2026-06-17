@@ -92,7 +92,7 @@ def get_entries(nomination_id):
     result = [dict(entry) for entry in entries]
     return jsonify(result)
 
-@app.route('/api/entries', methods=['POST'])
+@app.route('/parad/api/entries', methods=['POST'])
 def save_entry():
     """Сохранить или обновить запись"""
     data = request.json
@@ -111,7 +111,7 @@ def save_entry():
     
     return jsonify({'success': True, 'id': entry_id})
 
-@app.route('/api/entries/<entry_id>', methods=['DELETE'])
+@app.route('/parad/api/entries/<entry_id>', methods=['DELETE'])
 def delete_entry(entry_id):
     """Удалить запись по ID"""
     conn = get_db_connection()
@@ -123,7 +123,7 @@ def delete_entry(entry_id):
 
 # ========== API для сценариев ==========
 
-@app.route('/api/scenarios', methods=['GET'])
+@app.route('/parad/api/scenarios', methods=['GET'])
 def get_scenarios():
     """Получить все сценарии"""
     conn = get_db_connection()
@@ -142,7 +142,7 @@ def get_scenarios():
     
     return jsonify(result)
 
-@app.route('/api/scenarios', methods=['POST'])
+@app.route('/parad/api/scenarios', methods=['POST'])
 def save_scenario():
     """Сохранить новый сценарий"""
     data = request.json
@@ -162,7 +162,7 @@ def save_scenario():
     
     return jsonify({'success': True, 'id': scenario_id})
 
-@app.route('/api/scenarios/<scenario_id>', methods=['DELETE'])
+@app.route('/parad/api/scenarios/<scenario_id>', methods=['DELETE'])
 def delete_scenario(scenario_id):
     """Удалить сценарий по ID"""
     conn = get_db_connection()
